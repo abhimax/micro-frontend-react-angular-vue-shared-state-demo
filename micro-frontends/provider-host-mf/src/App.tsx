@@ -1,38 +1,29 @@
-import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import Layout from './components/Layout';
+import Dashboard from './components/Dashboard';
+import RemotePage from './components/RemotePage';
+import Overview from './components/Overview';
+import { PatientApp, AppointmentApp, BillingApp } from './remotes';
 
-// Lazy-loaded from the remotes over Module Federation.
-const PatientApp = lazy(() => import('patient_remote_mf/App'));
-const AppointmentApp = lazy(() => import('appointment_remote_mf/App'));
-const BillingApp = lazy(() => import('billing_remote_mf/App'));
-
+// Client-side routing lives in the host. Each route renders either the
+// dashboard, a single remote micro-frontend, or the combined Overview.
 const App = () => {
   return (
-    <div className="content">
-      <h1>Provider Host MF</h1>
-      <p>Start building amazing things with Rsbuild.</p>
-
-      <section>
-        <h2>Patient (remote)</h2>
-        <Suspense fallback={<p>Loading patient module…</p>}>
-          <PatientApp />
-        </Suspense>
-      </section>
-
-      <section>
-        <h2>Appointment (remote)</h2>
-        <Suspense fallback={<p>Loading appointment module…</p>}>
-          <AppointmentApp />
-        </Suspense>
-      </section>
-
-      <section>
-        <h2>Billing (remote)</h2>
-        <Suspense fallback={<p>Loading billing module…</p>}>
-          <BillingApp />
-        </Suspense>
-      </section>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="patients" element={<RemotePage Component={PatientApp} />} />
+          <Route
+            path="appointments"
+            element={<RemotePage Component={AppointmentApp} />}
+          />
+          <Route path="invoices" element={<RemotePage Component={BillingApp} />} />
+          <Route path="overview" element={<Overview />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
