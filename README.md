@@ -22,14 +22,22 @@ Browser → Host :3000
 
 | App                 | Port | Type        |
 | ------------------- | ---- | ----------- |
-| provider-host-mf    | 3000 | MF host     |
-| patient-remote-mf   | 3001 | MF remote   |
-| appointment-remote-mf | 3002 | MF remote |
-| billing-remote-mf   | 3003 | MF remote   |
+| provider-host-mf    | 3000 | MF host (React) |
+| patient-remote-mf   | 3001 | MF remote (React) |
+| appointment-remote-mf | 3002 | MF remote (React, legacy — superseded by Angular) |
+| billing-remote-mf   | 3003 | MF remote (React) |
+| appointment-angular-remote-mf | 3004 | MF remote (**Angular**) |
 | api-gateway         | 4000 | gateway     |
 | patient-service     | 4001 | service     |
 | appointment-service | 4002 | service     |
 | billing-service     | 4003 | service     |
+
+> **Technology-agnostic note:** the appointments tile is served by an **Angular**
+> remote (`appointment-angular-remote-mf`), consumed by the **React** host over
+> Module Federation. It exposes a framework-neutral `mount()/unmount()` instead
+> of a React component, and the host embeds it via a small adapter
+> ([MountRemote.tsx](micro-frontends/provider-host-mf/src/components/MountRemote.tsx)).
+> The original React appointment remote (3002) is kept temporarily for comparison.
 
 ## Run everything
 
@@ -77,7 +85,7 @@ node scripts/dev.mjs host gateway patient-mf
 ```
 
 Valid app keys: `gateway`, `patient-svc`, `appt-svc`, `bill-svc`, `host`,
-`patient-mf`, `appt-mf`, `bill-mf`.
+`patient-mf`, `appt-mf`, `bill-mf`, `appt-ng` (the Angular appointment remote).
 
 ## Layout
 

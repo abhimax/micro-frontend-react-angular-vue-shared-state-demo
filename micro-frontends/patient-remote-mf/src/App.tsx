@@ -18,7 +18,12 @@ const App = () => {
 
   return (
     <div className="p-6 text-left">
-      <h2 className="mb-4 text-2xl font-bold">Patients</h2>
+      <div className="flex items-center gap-2 align-middle mb-4">
+        <h2 className="text-2xl font-bold">Patients</h2>
+        <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs">
+          React
+        </span>
+      </div>
 
       {loading && <p className="opacity-70">Loading patients…</p>}
       {error && <p className="text-red-400">⚠ {error}</p>}
