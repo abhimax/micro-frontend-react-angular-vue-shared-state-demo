@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { PatientApp, AppointmentApp, BillingApp } from '../remotes';
+import MountRemote from './MountRemote';
+import { PatientApp, BillingApp, loadAngularAppointments } from '../remotes';
 
 // Composes all three remotes on a single page — the classic micro-frontend
 // "shell aggregates many remotes" view. Each remote loads independently, so
@@ -26,9 +27,8 @@ const Overview = () => {
         </section>
 
         <section className="rounded-2xl border border-white/10 bg-white/5">
-          <Suspense fallback={<p className="p-6 opacity-70">Loading appointments…</p>}>
-            <AppointmentApp />
-          </Suspense>
+          {/* Angular remote — mounted via the framework-agnostic adapter. */}
+          <MountRemote loader={loadAngularAppointments} />
         </section>
 
         <section className="rounded-2xl border border-white/10 bg-white/5">

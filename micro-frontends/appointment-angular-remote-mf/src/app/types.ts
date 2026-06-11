@@ -1,4 +1,5 @@
-// Mirrors the contract exposed by appointment-service.
+// Mirrors the contract exposed by appointment-service (same shape the React
+// remote used — only the framework rendering it has changed).
 export interface Appointment {
   id: number;
   patientId: number;

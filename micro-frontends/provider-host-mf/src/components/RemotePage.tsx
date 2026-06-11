@@ -1,15 +1,15 @@
-import { Suspense, type ComponentType } from 'react';
+import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
 interface Props {
-  // The lazy-loaded remote component to render on this route.
-  Component: ComponentType;
+  children: ReactNode;
 }
 
-// Wraps a single remote micro-frontend: a "back to dashboard" link plus a
-// Suspense boundary while the remote's code is fetched over the network.
-const RemotePage = ({ Component }: Props) => {
+// Page shell for a single remote: a "back to dashboard" link plus whatever
+// content the route provides (a React remote in <Suspense>, or the Angular
+// remote via <MountRemote>).
+const RemotePage = ({ children }: Props) => {
   return (
     <div>
       <Link
@@ -19,9 +19,7 @@ const RemotePage = ({ Component }: Props) => {
         <ArrowLeft className="h-4 w-4" /> Back to dashboard
       </Link>
 
-      <Suspense fallback={<p className="opacity-70">Loading micro-frontend…</p>}>
-        <Component />
-      </Suspense>
+      {children}
     </div>
   );
 };
