@@ -21,15 +21,14 @@ declare module 'patient_remote_mf/App' {
   export default App;
 }
 
-declare module 'billing_remote_mf/App' {
-  import type React from 'react';
-  const App: React.ComponentType;
-  export default App;
+// The Angular and Vue remotes are framework-agnostic: they expose
+// mount/unmount, not a React component.
+declare module 'appointment_angular_remote_mf/mount' {
+  export function mount(el: HTMLElement): void | Promise<void>;
+  export function unmount(): void;
 }
 
-// The Angular remote is framework-agnostic: it exposes mount/unmount, not a
-// React component.
-declare module 'appointment_angular_remote_mf/mount' {
+declare module 'billing_vue_remote_mf/mount' {
   export function mount(el: HTMLElement): void | Promise<void>;
   export function unmount(): void;
 }

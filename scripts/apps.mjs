@@ -45,7 +45,7 @@ export const APPS = [
   },
   {
     key: "bill-mf",
-    dir: "micro-frontends/billing-remote-mf",
+    dir: "micro-frontends/billing-vue-remote-mf",
     port: 3003,
     color: "red",
   },

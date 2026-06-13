@@ -13,8 +13,8 @@ export default defineConfig({
         // a remote can be rebuilt/redeployed without rebuilding the host.
         patient_remote_mf:
           'patient_remote_mf@http://localhost:3001/mf-manifest.json',
-        billing_remote_mf:
-          'billing_remote_mf@http://localhost:3003/mf-manifest.json',
+        billing_vue_remote_mf:
+          'billing_vue_remote_mf@http://localhost:3003/mf-manifest.json',
         // The Angular remote emits a classic remoteEntry.js (no mf-manifest.json),
         // so it is referenced by that file instead of the manifest.
         appointment_angular_remote_mf:

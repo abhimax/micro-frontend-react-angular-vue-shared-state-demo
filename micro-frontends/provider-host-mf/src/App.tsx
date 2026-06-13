@@ -6,12 +6,12 @@ import Dashboard from './components/Dashboard';
 import RemotePage from './components/RemotePage';
 import MountRemote from './components/MountRemote';
 import Overview from './components/Overview';
-import { PatientApp, BillingApp, loadAngularAppointments } from './remotes';
+import { PatientApp, loadAngularAppointments, loadVueBilling } from './remotes';
 
 // Client-side routing lives in the host. Each route renders either the
 // dashboard, a single remote micro-frontend, or the combined Overview.
-// Appointments is served by an ANGULAR remote (mounted via MountRemote);
-// the others are React remotes.
+// Appointments and invoices are non-React remotes (mounted via MountRemote);
+// patients is a React remote.
 const App = () => {
   return (
     <BrowserRouter>
@@ -44,13 +44,7 @@ const App = () => {
             path="invoices"
             element={
               <RemotePage>
-                <Suspense
-                  fallback={
-                    <p className="opacity-70">Loading billing module…</p>
-                  }
-                >
-                  <BillingApp />
-                </Suspense>
+                <MountRemote loader={loadVueBilling} />
               </RemotePage>
             }
           />
