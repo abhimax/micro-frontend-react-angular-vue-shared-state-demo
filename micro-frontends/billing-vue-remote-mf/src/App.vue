@@ -2,9 +2,7 @@
   <div class="p-6 text-left">
     <div class="flex items-center gap-2 align-middle mb-4">
       <h2 class="text-2xl font-bold">Invoices</h2>
-      <span class="bg-teal-600 text-white px-2 py-1 rounded-full text-xs">
-        Vue
-      </span>
+<span style="font-size: 0.7rem; font-weight: 600; background:rgb(10, 128, 90); color: #fff; padding: 0.15rem 0.5rem; border-radius: 9999px;">Vue</span>
     </div>
 
     <p v-if="loading" class="opacity-70">Loading invoices…</p>
