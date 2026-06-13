@@ -39,6 +39,12 @@ Browser → Host :3000
 > ([MountRemote.tsx](micro-frontends/provider-host-mf/src/components/MountRemote.tsx)).
 > The original React appointment remote (3002) is kept temporarily for comparison.
 
+> **Cross-framework event bus:** This demo implements a custom event bus that enables
+> real-time state sharing across React, Angular, and Vue micro-frontends. When a patient
+> is selected in the React patient app, the Angular appointment and Vue billing apps
+> automatically filter their data to show only records for that patient. See the
+> [Event Bus Documentation](micro-frontends/EVENT_BUS.md) for details.
+
 ## Run everything
 
 From this root folder:
@@ -91,3 +97,56 @@ Valid app keys: `gateway`, `patient-svc`, `appt-svc`, `bill-svc`, `host`,
 
 - [`micro-frontends/`](micro-frontends/) — the host and three remotes (React + Rsbuild + Module Federation)
 - [`micro-services/`](micro-services/) — the API gateway and three services (Express + better-sqlite3 + TypeScript); see its [README](micro-services/README.md)
+
+## Micro-Frontend Frameworks
+
+This demo showcases **multi-framework micro-frontend architecture** using Module Federation:
+
+| Micro-Frontend | Framework | Port | Purpose |
+| -------------- | --------- | ---- | ------- |
+| **Patient** | React | 3001 | Displays patient list, emits selection events |
+| **Appointment** | Angular | 3004 | Displays appointments, filters by selected patient |
+| **Billing** | Vue.js | 3003 | Displays invoices, filters by selected patient |
+| **Host** | React | 3000 | Composes all remotes using React Router |
+
+### Cross-Framework Event Bus
+
+The demo implements a **custom event bus** (`micro-frontends/shared-event-bus.ts`) that enables real-time state sharing across different frameworks:
+
+- **Framework-agnostic**: Uses browser's CustomEvent API, works with React, Angular, Vue
+- **Decoupled communication**: Micro-frontends communicate without direct dependencies
+- **Type-safe**: Event names defined as constants for type safety
+- **Automatic cleanup**: Built-in unsubscribe mechanism prevents memory leaks
+
+#### Event Flow
+
+1. User clicks a patient in the **React** patient app
+2. Patient app emits `patient:selected` event with patient data
+3. **Angular** appointment app receives event and filters appointments
+4. **Vue** billing app receives event and filters invoices
+5. All apps update their UI to show only data for the selected patient
+6. Clearing selection in any app propagates to all other apps
+
+#### Event Names
+
+- `patient:selected` - Emitted when a patient is selected
+- `patient:deselected` - Emitted when patient selection is cleared
+
+For detailed implementation guide, see [Event Bus Documentation](micro-frontends/EVENT_BUS.md).
+
+### Framework-Specific Implementation
+
+**React (Patient & Host):**
+- Uses React hooks (useState, useEffect) for state management
+- Event listeners registered in useEffect with cleanup
+- Click handlers emit events via eventBus.emit()
+
+**Angular (Appointment):**
+- Uses Angular signals for reactive state management
+- Event listeners in ngOnInit with ngOnDestroy cleanup
+- Template uses @if and @for control flow syntax
+
+**Vue.js (Billing):**
+- Uses Vue 3 Composition API with ref and computed
+- Event listeners in onMounted with onUnmounted cleanup
+- Template uses v-if and v-for directives
