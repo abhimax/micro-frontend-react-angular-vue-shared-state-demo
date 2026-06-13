@@ -5,32 +5,18 @@ A Module Federation host composes three independently-built React remotes; each
 remote talks (through a single API gateway) to its own Express micro-service,
 and each service owns its own SQLite database.
 
-```
-Browser → Host :3000
-            ├── Patient remote :3001 ──┐
-            ├── Appointment remote :3002 ┤ fetch (single origin)
-            └── Billing remote :3003 ──┘
-                       │
-                       ▼
-              API Gateway :4000   ── GET /patients/:id/summary aggregates all three
-            ┌──────────┼───────────┐
-            ▼          ▼            ▼
-   patient :4001  appointment :4002  billing :4003
-        │              │                 │
-   patient.db     appointment.db    billing.db
-```
+![NESTBOARD!](architecture-diagram.png)
 
-| App                 | Port | Type        |
-| ------------------- | ---- | ----------- |
-| provider-host-mf    | 3000 | MF host (React) |
-| patient-remote-mf   | 3001 | MF remote (React) |
-| appointment-remote-mf | 3002 | MF remote (React, legacy — superseded by Angular) |
-| billing-remote-mf   | 3003 | MF remote (React) |
-| appointment-angular-remote-mf | 3004 | MF remote (**Angular**) |
-| api-gateway         | 4000 | gateway     |
-| patient-service     | 4001 | service     |
-| appointment-service | 4002 | service     |
-| billing-service     | 4003 | service     |
+| App                           | Port | Type                |
+| ----------------------------- | ---- | ------------------- |
+| provider-host-mf              | 3000 | MF host (React)     |
+| patient-remote-mf             | 3001 | MF remote (React)   |
+| appointment-angular-remote-mf | 3002 | MF remote (Angular) |
+| billing-Vue-remote-mf         | 3003 | MF remote (Vue)     |
+| api-gateway                   | 4000 | gateway             |
+| patient-service               | 4001 | service             |
+| appointment-service           | 4002 | service             |
+| billing-service               | 4003 | service             |
 
 > **Technology-agnostic note:** the appointments tile is served by an **Angular**
 > remote (`appointment-angular-remote-mf`), consumed by the **React** host over
@@ -65,7 +51,7 @@ you launched, so no dev server is left orphaned.
 
 ### Stop specific apps
 
-To stop only *some* apps while the rest keep running, open a **second terminal**
+To stop only _some_ apps while the rest keep running, open a **second terminal**
 and run:
 
 ```bash
@@ -102,12 +88,12 @@ Valid app keys: `gateway`, `patient-svc`, `appt-svc`, `bill-svc`, `host`,
 
 This demo showcases **multi-framework micro-frontend architecture** using Module Federation:
 
-| Micro-Frontend | Framework | Port | Purpose |
-| -------------- | --------- | ---- | ------- |
-| **Patient** | React | 3001 | Displays patient list, emits selection events |
-| **Appointment** | Angular | 3004 | Displays appointments, filters by selected patient |
-| **Billing** | Vue.js | 3003 | Displays invoices, filters by selected patient |
-| **Host** | React | 3000 | Composes all remotes using React Router |
+| Micro-Frontend  | Framework | Port | Purpose                                            |
+| --------------- | --------- | ---- | -------------------------------------------------- |
+| **Patient**     | React     | 3001 | Displays patient list, emits selection events      |
+| **Appointment** | Angular   | 3004 | Displays appointments, filters by selected patient |
+| **Billing**     | Vue.js    | 3003 | Displays invoices, filters by selected patient     |
+| **Host**        | React     | 3000 | Composes all remotes using React Router            |
 
 ### Cross-Framework Event Bus
 
@@ -137,16 +123,19 @@ For detailed implementation guide, see [Event Bus Documentation](micro-frontends
 ### Framework-Specific Implementation
 
 **React (Patient & Host):**
+
 - Uses React hooks (useState, useEffect) for state management
 - Event listeners registered in useEffect with cleanup
 - Click handlers emit events via eventBus.emit()
 
 **Angular (Appointment):**
+
 - Uses Angular signals for reactive state management
 - Event listeners in ngOnInit with ngOnDestroy cleanup
 - Template uses @if and @for control flow syntax
 
 **Vue.js (Billing):**
+
 - Uses Vue 3 Composition API with ref and computed
 - Event listeners in onMounted with onUnmounted cleanup
 - Template uses v-if and v-for directives
