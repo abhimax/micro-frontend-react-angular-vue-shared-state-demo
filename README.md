@@ -1,4 +1,6 @@
-# Medical Domain Architecture Demo
+# Healthcare Micro-Frontend Reference Architecture
+
+## A Module Federation demo showcasing React, Angular, and Vue micro-frontends with shared state, API Gateway integration, and independent microservices.
 
 A teaching demo of **micro-frontend + API gateway + micro-service** architecture.
 A Module Federation host composes three independently-built React remotes; each
